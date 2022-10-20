@@ -15,7 +15,11 @@ export default function Home({ data }) {
         <title>Next.js Blog</title>
         <meta property='og:title' content='My Blog Built with Next.js' />
         <meta property='og:url' content='/' />
-        <meta name='description' property='og:description' content='Blog' />
+        <meta
+          name='description'
+          property='og:description'
+          content='This is my blog built with next.js. It is very cool'
+        />
         <meta property='og:type' content='website' />
         <meta property='og:image' content='/favicon.ico' />
         <link rel='icon' href='/favicon.ico' />
