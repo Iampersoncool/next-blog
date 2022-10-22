@@ -8,10 +8,13 @@ import Head from 'next/head'
 import Link from 'next/link'
 import formatDate from '../../utils/formatDate'
 import SyntaxHighlighter from '../../components/SyntaxHighlighter'
+import styles from '../../styles/blog'
 
 export default function DisplayPage({ code, frontmatter: frontMatter }) {
   const Component = useMemo(() => getMDXComponent(code), [code])
-  const router = useRouter()
+  const {
+    query: { slug },
+  } = useRouter()
 
   const formattedDate = formatDate(frontMatter.date, 'LL')
 
@@ -20,7 +23,7 @@ export default function DisplayPage({ code, frontmatter: frontMatter }) {
       <Head>
         <title>{frontMatter.title}</title>
         <meta property='og:title' content={frontMatter.title} />
-        <meta property='og:url' content={`/${router.query.slug}`} />
+        <meta property='og:url' content={`/${slug}`} />
         <meta
           name='description'
           property='og:description'
@@ -34,62 +37,7 @@ export default function DisplayPage({ code, frontmatter: frontMatter }) {
         <p className='post__description'>{frontMatter.description}</p>
         <hr />
       </header>
-      <style jsx>
-        {`
-          main {
-            margin-top: 1rem;
-          }
-
-          hr {
-            max-width: calc(100vw - 2rem);
-          }
-
-          .post__container__header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.4rem;
-          }
-
-          .post__title {
-            font-size: 3.2rem;
-          }
-
-          .post__date {
-            font-size: 1.3rem;
-          }
-
-          .post__description {
-            font-size: 1.4rem;
-          }
-
-          .post__container__header hr {
-            border: 1px solid black;
-            width: 100vw;
-          }
-
-          .go__home {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            margin: 1rem;
-            color: white;
-            background-color: red;
-            padding: 0.5rem;
-            border-radius: 0.4rem;
-          }
-
-          .go__home:hover {
-            filter: brightness(80%);
-          }
-
-          .centered {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-        `}
-      </style>
+      <style jsx>{styles}</style>
 
       <style jsx global>{`
         pre code.hljs {
@@ -119,7 +67,7 @@ export function getStaticPaths() {
     paths: fileNames.map((fileName) => {
       return {
         params: {
-          slug: fileName.split('.')[0],
+          slug: fileName.replace('.mdx', ''),
         },
       }
     }),

@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
 import Link from 'next/link'
 import truncateStr from '../utils/truncateStr'
 import formatDate from '../utils/formatDate'
+import getAllFilesFrontMatter from '../utils/getAllFilesFrontMatter'
 
 export default function Home({ data }) {
   return (
@@ -60,22 +58,11 @@ export default function Home({ data }) {
 }
 
 export function getStaticProps() {
-  const fileNames = fs.readdirSync('posts', 'utf-8')
-
-  const data = fileNames.map((fileName) => {
-    const mdxSource = fs.readFileSync(path.join('posts', fileName), 'utf-8')
-    const slug = fileName.split('.')[0]
-    const { data: frontMatter } = matter(mdxSource)
-
-    return {
-      frontMatter,
-      slug,
-    }
-  })
+  const data = getAllFilesFrontMatter('posts')
 
   return {
     props: {
-      data: JSON.parse(JSON.stringify(data)),
+      data,
     },
   }
 }
